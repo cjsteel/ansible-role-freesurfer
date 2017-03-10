@@ -114,16 +114,18 @@ freesurfer_local_directories_description:
     owner       : "{{ ansible_ssh_user }}"
     group       : "{{ ansible_ssh_user }}"
     mode        : "0644"
+```
 
 Example Playbook
 ----------------
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
+```yaml
     - hosts: servers
       roles:
          - { role: cjsteel.ansible-role-freesurfer, x: 42 }
-
+```
 
 License
 -------
