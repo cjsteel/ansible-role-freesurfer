@@ -1,26 +1,52 @@
-# roles/freesurfer/tests/vagrant.yml
 ---
+# file: roles/freesurfer/tests/vagrant.yml
+
 - hosts: all
-  remote_user: vagrant
-  sudo: true
-  roles:
-    - ../../
+  remote_user: ubuntu
+  pre_tasks:
+
+    - set_fact: fact_controller_user="{{ lookup('env','USER') }}"
+    - debug: var=fact_controller_user
+
+    - set_fact: fact_controller_home="{{ lookup('env','HOME') }}"
+    - debug: var=fact_controller_home
+
   vars:
 
-    - freesurfer_shell: 'tcsh' # 'bash'...
-    - freesurfer_shell_path: chsh -s /bin/{{ freesurfer_shell }}
+    - freesurfer_remote_user            : 'ubuntu'
+    - freesurfer_controller_user        : '{{ fact_controller_user }}'
+    - freesurfer_deployment_user        : '{{ freesurfer_remote_user }}'
+    - freesurfer_remote_deployment_user : '{{ freesurfer_deployment_user }}'
 
-# package
 
-    - freesurfer_arch : 'amd64'
-    - freesurfer_ver  : '1.0.2-2'
-    - freesurfer_pkg  : 'libxp6_{{ freesurfer_ver }}_{{ freesurfer_arch }}.deb'
-    - freesurfer_deb_url  : 'http://mirrors.kernel.org/ubuntu/pool/main/libx/libxp/{{ freesurfer_pkg }}'
-  
-#    - skel_entries:
-#      - path: "/etc/skel/.ssh"
-#        mode: "0700"
-#        state: "directory"
-#      - path: "/etc/skel/passwd"
-#        src: "/etc/passwd"
-#        state: "link"
+
+    - freesurfer_state         : 'present'
+    - freesurfer_ver     : 'v6.0.0'
+
+    - freesurfer_local_resource_directory   : 'sys/sw/ubuntu/16.04/freesurfer/{{ freesurfer_ver }}'
+    - freesurfer_remote_resource_directory  : '{{ freesurfer_local_resource_directory }}'
+
+    - freesurfer_ensure_dirs_on_remote:
+
+        freesurfer_remote_resource_dir:
+
+          state          : 'directory'
+          path           : '{{ freesurfer_local_resource_directory }}'
+          owner          : '{{ freesurfer_remote_user }}'
+          group          : '{{ freesurfer_remote_user }}'
+          mode           : '0755'
+
+    - freesurfer_ensure_dirs_on_local:
+
+        freesurfer_local_resource_dir:
+
+          state          : 'directory'
+          path           : '{{ fact_controller_home }}/{{ freesurfer_local_resource_directory }}'
+          owner          : '{{ freesurfer_controller_user }}'
+          group          : '{{ freesurfer_controller_user }}'
+          mode           : '0755'
+
+  roles:
+    - ../../
+
+
