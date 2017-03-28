@@ -1,5 +1,71 @@
 ---
 # roles/ansible-role-freesurfer/tasks/main.yml
 
-#- name: "debug the value of freesurfer_deb_url"
--  debug: var=freesurfer_deb_url
+- name: "update apt cache"
+  become: true
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  tags: [ 'packages' ]
+
+## install requirements
+
+- name: "install requirements for freesurfer"
+  become: true
+  apt:
+    name: '{{ item }}'
+    state: '{{ freesurfer_state }}'
+  with_items:
+    - libjpeg62
+    #- libjpeg62-dev
+  when: freesurfer_state == 'present'
+  tags: [ 'packages', 'utilities' ]
+
+## Download
+
+#- name: "Download latest stable version of freesurfer"
+#  get_url:
+#    url: 'ftp://surfer.nmr.mgh.harvard.edu/pub/dist/freesurfer/6.0.0/freesurfer-Linux-centos6_x86_64-stable-pub-v6.0.0.tar.gz'
+#    dest: '{{ freesurfer_remote_resource_directory }}/freesurfer-Linux-centos6_x86_64-stable-pub-v6.0.0.tar.gz'
+#    validate_certs: no
+#  when: freesurfer_state == 'present'
+#  tags: [ 'packages', 'freesurfer' ]
+
+## Copy archive
+
+- name: "copy over our gigantic archive that takes hours to download!"
+  copy:
+    src: 'files/freesurfer-Linux-centos6_x86_64-stable-pub-v6.0.0.tar.gz'
+    dest: '{{ freesurfer_remote_resource_directory }}/freesurfer-Linux-centos6_x86_64-stable-pub-v6.0.0.tar.gz'
+  when: freesurfer_state == 'present'
+
+## unarchive
+
+- name: create versioned freesurfer
+  become: true
+  command: sudo tar -C /usr/local -xzvf freesurfer-Linux-centos6_x86_64-stable-pub-v6.0.0.tar.gz
+  when: freesurfer_state == 'present'
+
+## Remove
+
+#- name: "remove /opt/freesurfer"
+#  become: true
+#  command: rm -R /opt/freesurfer
+#  when: freesurfer_state == 'absent' or freesurfer_state == 'purge'
+#  ignore_errors: yes
+
+# User configuration
+
+## We ensure for the creation of the directory /etc/skel/bin
+#
+# done via dependancy in meta/main.yml
+
+## Ensure for executable ~/bin/freesurfer-toolkit-config.sh
+#
+# done via dependancy in meta/main.yml
+
+## Ensure for versioned executable ~/bin/freesurfer-toolkit-config.sh
+#
+# done via dependancy in meta/main.yml
+
+ 

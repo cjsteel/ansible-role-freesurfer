@@ -1,3 +1,4 @@
+
 ansible-role-freesurfer
 =======================
 
@@ -13,12 +14,14 @@ It is an important tool in functional brain mapping and facilitates the visualiz
 
 It contains tools to conduct both volume based and surface based analysis, which primarily use the white matter surface. FreeSurfer includes tools for the reconstruction of topologically correct and geometrically accurate models of both the gray/white and pial surfaces, for measuring cortical thickness, surface area and folding, and for computing inter-subject registration based on the pattern of cortical folds. In addition, an automated labeling of 35 non-cortical regions is included in the package."
 
+
 Resources
 ---------
 
 -  http://www.freesurfer.net/ 
 -  http://www.freesurfer.net/fswiki/DownloadAndInstall 
 -  https://en.wikipedia.org/wiki/FreeSurfer 
+
 
 Requirements
 ------------
@@ -29,19 +32,22 @@ Requirements
 sudo apt-get install libjpeg62
 ```
 
+
 Options
 -------
 
 - Matlab (only needed to run FS-FAST, the fMRI analysis stream)
 
+
 Issues
 ------
 
-On Ubuntu platforms, you may encounter the error "freeview.bin: error while loading shared libraries: libjpeg.so.62: cannot open shared object file: No such file or directory." Freeview will work fine if you install libjpeg62-dev and run: 
+On Ubuntu platforms, you may encounter the error "freeview.bin: error while loading shared libraries: libjpeg.so.62: cannot open shared object file: No such file or directory." Freeview will work fine if you install libjpeg62-dev run: 
 
 ```shell
 sudo apt-get install libjpeg62-dev
 ```
+
 
 Role Variables
 --------------
@@ -67,6 +73,7 @@ freesurfer_mni_dir		 : '/usr/local/freesurfer/mni'
 freesurfer_users_test_dir: '~/freesurfer/test'
 freesurfer_subject_samples: 'sample-001.mgz'
 ```
+
 
 Dependencies
 ------------
@@ -116,6 +123,46 @@ freesurfer_local_directories_description:
     mode        : "0644"
 ```
 
+## Playbooks
+
+### Role playbook
+
+```shell
+cp ..roles/freesurfer/files/freesurfer.yml .
+```
+
+Edit:
+
+```shell
+nano freesurfer.yml
+```
+
+
+
+```yaml
+---
+# file: '{{ ansible_project }}/minc.yml'
+
+- hosts: freesurfer
+  become: true
+  gather_facts: true
+  pre_tasks:
+
+    - set_fact: fact_controller_user="{{ lookup('env','USER') }}"
+    - debug: var=fact_controller_user
+
+    - set_fact: fact_controller_home="{{ lookup('env','HOME') }}"
+    - debug: var=fact_controller_home
+
+  roles:
+
+    - freesurfer
+```
+
+### main playbook
+
+
+
 Example Playbook
 ----------------
 
@@ -127,10 +174,12 @@ Including an example of how to use your role (for instance, with variables passe
          - { role: cjsteel.ansible-role-freesurfer, x: 42 }
 ```
 
+
 License
 -------
 
 MIT
+
 
 Author Information
 ------------------
