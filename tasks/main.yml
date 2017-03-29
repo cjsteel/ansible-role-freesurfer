@@ -6,6 +6,7 @@
   apt:
     update_cache: yes
     cache_valid_time: 3600
+  when: freesurfer_state == 'present'
   tags: [ 'packages' ]
 
 ## install requirements
@@ -23,6 +24,8 @@
 
 ## Download
 
+# This takes 2 to 3 hours...
+#
 #- name: "Download latest stable version of freesurfer"
 #  get_url:
 #    url: 'ftp://surfer.nmr.mgh.harvard.edu/pub/dist/freesurfer/6.0.0/freesurfer-Linux-centos6_x86_64-stable-pub-v6.0.0.tar.gz'
@@ -41,42 +44,76 @@
 
 ## unarchive
 
-- name: "unarchive freesurfer to /usr/local/freesurfer"
+# DOES NOT WORK ???
+#
+#- name: "unarchive freesurfer to /usr/local/freesurfer"
+#  become: true
+#  unarchive:
+#    src: '{{ freesurfer_remote_resource_directory }}/freesurfer-Linux-centos6_x86_64-stable-pub-v6.0.0.tar.gz'
+#    dest: '/usr/local'
+#    creates: '/usr/local/freesurfer'
+#  when: freesurfer_state == 'present'
+
+- name: create versioned freesurfer
   become: true
-  unarchive:
-    chdir: '{{ freesurfer_remote_resource_directory }}/'
-    src: 'freesurfer-Linux-centos6_x86_64-stable-pub-v6.0.0.tar.gz'
-    dest: '/usr/local'
+  command: tar -C /usr/local -xzvf freesurfer-Linux-centos6_x86_64-stable-pub-v6.0.0.tar.gz
+  args:
+    chdir: '{{ freesurfer_remote_resource_directory }}'
     creates: '/usr/local/freesurfer'
   when: freesurfer_state == 'present'
 
+
 - name: "copy over files/license.txt"
+  become: true  
   copy:
     src: 'files/license.txt'
     dest: '/usr/local/freesurfer/license.txt'
   when: freesurfer_state == 'present'
 
-#- name: create versioned freesurfer
-#  become: true
-#  command: tar -C /home/ubuntu -xzvf freesurfer-Linux-centos6_x86_64-stable-pub-v6.0.0.tar.gz
-#  args:
-#    chdir: '{{ freesurfer_remote_resource_directory }}/'
-#    creates: '/home/ubuntu/freesurfer'
-#  when: freesurfer_state == 'present'
-
 ## Remove
 
-#- name: "remove /opt/freesurfer"
-#  become: true
-#  command: rm -R /opt/freesurfer
-#  when: freesurfer_state == 'absent' or freesurfer_state == 'purge'
-#  ignore_errors: yes
+- name: "remove /usr/local/freesurfer"
+  become: true
+  command: rm -R /usr/local/freesurfer
+  when: freesurfer_state == 'absent' or freesurfer_state == 'purge'
+  ignore_errors: yes
 
-# User configuration
+## Remove freesurfer installer
 
-## We ensure for the creation of the directory /etc/skel/bin
-#
-# done via dependancy in meta/main.yml
+- name: "remove /usr/local/freesurfer"
+  become: true
+  command: "rm -R {{ freesurfer_remote_resource_directory }}/freesurfer-Linux-centos6_x86_64-stable-pub-v6.0.0.tar.gz"
+  when: freesurfer_state == 'purge'
+  ignore_errors: yes
+
+- name: "ensure we have an aliase to setup freesurfer"
+  become: true
+  blockinfile:
+    dest  : '/etc/skel/.bash_aliases'
+    marker: '## {mark} ANSIBLE MANAGED BLOCK for FREESURFER ALIAS srcfreesurfer'
+    insertafter: 'EOF'
+    content: |
+      # add alias for freesurfer setup
+      #
+      alias srcfreesurfer="source $FREESURFER_HOME/SetUpFreeSurfer.sh"
+    state: 'absent'
+  when: freesurfer_state == 'purge'
+
+- name: "add export FREESURFER_HOME=/usr/local/freesurfer to /etc/skel/.bashrc"
+  become: true
+  blockinfile:
+    marker: '## {mark} ANSIBLE MANAGED BLOCK for FREESURFER_HOME export'
+    dest: '/etc/skel/.bashrc'
+    insertafter: 'EOF'
+    block: |
+      #
+      # export FREESURFER_HOME=/usr/local/freesurfer
+      if [ -d "/usr/local/freesurfer" ] ; then
+          export FREESURFER_HOME=/usr/local/freesurfer
+      fi
+    state: 'absent'
+  when: freesurfer_state == 'purge'
+
 
 ## Ensure for executable ~/bin/freesurfer-toolkit-config.sh
 #

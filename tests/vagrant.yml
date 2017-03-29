@@ -14,17 +14,18 @@
   vars:
 
     - freesurfer_remote_user            : 'ubuntu'
+    - freesurfer_remote_home            : '/home/{{ freesurfer_remote_user }}'
     - freesurfer_controller_user        : '{{ fact_controller_user }}'
     - freesurfer_deployment_user        : '{{ freesurfer_remote_user }}'
     - freesurfer_remote_deployment_user : '{{ freesurfer_deployment_user }}'
 
 
 
-    - freesurfer_state         : 'present'
+    - freesurfer_state   : 'present' #'absent' # 'present' # 'absent' # 'purge'
     - freesurfer_ver     : 'v6.0.0'
 
     - freesurfer_local_resource_directory   : 'sys/sw/ubuntu/16.04/freesurfer/{{ freesurfer_ver }}'
-    - freesurfer_remote_resource_directory  : '{{ freesurfer_local_resource_directory }}'
+    - freesurfer_remote_resource_directory  : '{{ freesurfer_remote_home }}/sys/sw/ubuntu/16.04/freesurfer/{{ freesurfer_ver }}'
 
     - freesurfer_ensure_dirs_on_remote:
 
