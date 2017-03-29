@@ -1,15 +1,28 @@
 ---
-
 dependencies:
+
   - role: ensure_dirs
     tags: ['freesurfer', 'ensure_dirs']
     ensure_dirs_on_remote: '{{ freesurfer_ensure_dirs_on_remote }}'
     ensure_dirs_on_local : '{{ freesurfer_ensure_dirs_on_local }}'
 
-#  - role: skel
-#    become: true
-#    tags: ['freesurfer', 'skel']
-#    skel_entries: '{{ freesurfer_skel_entries }}'
+  - role: skel
+    become: true
+    tags: ['minc', 'skel']
+    skel_entries:
+
+      - name: "add export FREESURFER_HOME=/usr/local/freesurfer to /etc/skel/.bashrc"
+        type: 'blockinfile'    
+        marker: '## {mark} ANSIBLE MANAGED BLOCK for FREESURFER_HOME export '
+        path: "/etc/skel/.bashrc"
+        insertafter: "EOF"
+        block: |
+          #
+          # export FREESURFER_HOME=/usr/local/freesurfer
+          if [ -d "/usr/local/freesurfer" ] ; then
+              export FREESURFER_HOME=/usr/local/freesurfer
+          fi
+        state: "present"
 
 galaxy_info:
   author: your name

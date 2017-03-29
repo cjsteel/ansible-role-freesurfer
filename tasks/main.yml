@@ -41,10 +41,28 @@
 
 ## unarchive
 
-- name: create versioned freesurfer
+- name: "unarchive freesurfer to /usr/local/freesurfer"
   become: true
-  command: sudo tar -C /usr/local -xzvf freesurfer-Linux-centos6_x86_64-stable-pub-v6.0.0.tar.gz
+  unarchive:
+    chdir: '{{ freesurfer_remote_resource_directory }}/'
+    src: 'freesurfer-Linux-centos6_x86_64-stable-pub-v6.0.0.tar.gz'
+    dest: '/usr/local'
+    creates: '/usr/local/freesurfer'
   when: freesurfer_state == 'present'
+
+- name: "copy over files/license.txt"
+  copy:
+    src: 'files/license.txt'
+    dest: '/usr/local/freesurfer/license.txt'
+  when: freesurfer_state == 'present'
+
+#- name: create versioned freesurfer
+#  become: true
+#  command: tar -C /home/ubuntu -xzvf freesurfer-Linux-centos6_x86_64-stable-pub-v6.0.0.tar.gz
+#  args:
+#    chdir: '{{ freesurfer_remote_resource_directory }}/'
+#    creates: '/home/ubuntu/freesurfer'
+#  when: freesurfer_state == 'present'
 
 ## Remove
 
