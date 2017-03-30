@@ -38,8 +38,8 @@
 
 - name: "copy over our gigantic archive that takes hours to download!"
   copy:
-    src: 'files/freesurfer-Linux-centos6_x86_64-stable-pub-v6.0.0.tar.gz'
-    dest: '{{ freesurfer_remote_resource_directory }}/freesurfer-Linux-centos6_x86_64-stable-pub-v6.0.0.tar.gz'
+    src: '{{ freesurfer_local_resource_path }}'
+    dest: '{{ freesurfer_remote_resource_path }}'
   when: freesurfer_state == 'present'
 
 ## unarchive
@@ -56,7 +56,7 @@
 
 - name: create versioned freesurfer
   become: true
-  command: tar -C /usr/local -xzvf freesurfer-Linux-centos6_x86_64-stable-pub-v6.0.0.tar.gz
+  command: "tar -C /usr/local -xzvf {{ freesurfer_archive }}"
   args:
     chdir: '{{ freesurfer_remote_resource_directory }}'
     creates: '/usr/local/freesurfer'
@@ -82,7 +82,7 @@
 
 - name: "remove /usr/local/freesurfer"
   become: true
-  command: "rm -R {{ freesurfer_remote_resource_directory }}/freesurfer-Linux-centos6_x86_64-stable-pub-v6.0.0.tar.gz"
+  command: "rm -R {{ freesurfer_remote_resource_path }}"
   when: freesurfer_state == 'purge'
   ignore_errors: yes
 

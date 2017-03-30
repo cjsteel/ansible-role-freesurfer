@@ -13,11 +13,11 @@ dependencies:
 
       - name : "ensure for /etc/skel/.bash_aliases"
         path : '/etc/skel/.bash_aliases'
-        src  : './files/bash_aliases'
+        src  : '{{ freesurfer_bash_aliases_template }}'
         state: "copy"
 
-      - name: "ensure we have an aliase to setup freesurfer"
-        type: 'blockinfile'    
+      - name: "ensure we have an aliase entry for setting up freesurfer"
+        type: 'blockinfile'
         marker: '## {mark} ANSIBLE MANAGED BLOCK for FREESURFER ALIAS srcfreesurfer'
         path  : "/etc/skel/.bash_aliases"
         insertafter: "EOF"

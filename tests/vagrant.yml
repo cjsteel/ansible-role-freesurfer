@@ -47,6 +47,8 @@
           group          : '{{ freesurfer_controller_user }}'
           mode           : '0755'
 
+freesurfer_bash_aliases_temnplate: './files/bash_aliases'
+
   roles:
     - ../../
 

@@ -1,50 +1,43 @@
 ---
 # file: roles/ansible-role-freesurfer/defaults/main.yml
 
-freesurfer_state   : 'present' # 'present', 'absent', 'purge'
+freesurfer_state       : 'present' # 'present', 'absent', 'purge'
+freesurfer_ver         : 'v6.0.0'
+freesurfer_archive     : 'freesurfer-Linux-centos6_x86_64-stable-pub-v6.0.0.tar.gz'
 
+
+freesurfer_remote_user            : '{{ fact_controller_user }}'
+freesurfer_remote_home            : '{{ fact_controller_home }}'
 freesurfer_controller_user        : '{{ fact_controller_user }}'
+freesurfer_controller_home        : '{{ fact_controller_home }}'
 freesurfer_deployment_user        : '{{ freesurfer_controller_user }}'
 freesurfer_remote_deployment_user : '{{ freesurfer_deployment_user }}'
 
-freesurfer_archive     : 'freesurfer-Linux-centos6_x86_64-stable-pub-v6.0.0.tar.gz'
-freesurfer_ver     : 'v6.0.0'
+freesurfer_local_resource_directory : '{{ freesurfer_controller_home }}/sys/sw/Ubuntu/16.04/freesurfer/{{ freesurfer_ver }}'
+freesurfer_local_resource_path      : '{{ freesurfer_local_resource_directory }}/{{ freesurfer_archive }}'
 
-freesurfer_local_resource_directory   : '../ace_resources/sys/sw/freesurfer/{{ freesurfer_ver }}'
-freesurfer_remote_resource_directory  : 'sys/sw/ubuntu/16.04/freesurfer/{{ freesurfer_ver }}'
+freesurfer_remote_resource_directory : '{{ freesurfer_remote_home }}/sys/sw/Ubuntu/16.04/freesurfer/{{ freesurfer_ver }}'
+freesurfer_remote_resource_path      : '{{ freesurfer_remote_resource_directory }}/{{ freesurfer_archive }}'
+
 
 freesurfer_ensure_dirs_on_remote:
 
   freesurfer_remote_resource_dir:
 
     state          : 'directory'
-    path           : '{{ freesurfer_local_resource_directory }}'
-    owner          : '{{ freesurfer_deployment_user }}'
-    group          : '{{ freesurfer_deployment_user }}'
+    path           : '{{ freesurfer_remote_resource_directory }}'
+    owner          : '{{ freesurfer_remote_user }}'
+    group          : '{{ freesurfer_remote_user }}'
     mode           : '0755'
 
-freesurfer_ensure_dirs_on_local: []
+freesurfer_ensure_dirs_on_local:
 
+  freesurfer_local_resource_dir:
 
-freesurfer_skel_entries:
+    state          : 'directory'
+    path           : '{{ freesurfer_local_resource_directory }}'
+    owner          : '{{ freesurfer_controller_user }}'
+    group          : '{{ freesurfer_controller_user }}'
+    mode           : '0755'
 
-  - name: "meta/main.yml entry for /etc/skel/bin"
-    path  : '/etc/skel/bin'
-    user  : 'root'
-    group : 'root'
-    mode: '0755'
-    state: 'directory' # options are 'directory' or 'absent'
-
-  - name: "template /etc/skel/bin/minc-toolkit-config.sh"
-    src:  'roles/minc/templates/minc-toolkit-config.sh'
-    path: '/etc/skel/bin/minc-toolkit-config.sh'
-    mode: '0755'
-    state: 'template' # options are 'template' or 'absent'
-
-  - name:  "template /etc/skel/bin/minc-toolkit-conf-{{ freesurfer_ver}}.sh"
-    src:   'roles/minc/templates/versioned-minc-toolkit-config.sh'
-    path:  '/etc/skel/bin/minc-toolkit-config-{{ freesurfer_ver }}.sh'
-    mode:  '0755'
-    state: 'template' # options are 'template' or 'absent'
-
-
+freesurfer_bash_aliases_template: 'roles/freesurfer/files/bash_aliases'
