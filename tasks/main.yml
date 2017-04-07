@@ -24,6 +24,9 @@
 
 ## Download
 
+# Change this to be downloaded locally (to the controller.) in the mean time populate
+# the local resource directory manually.
+
 # This takes 2 to 3 hours...
 #
 #- name: "Download latest stable version of freesurfer"
@@ -35,6 +38,12 @@
 #  tags: [ 'packages', 'freesurfer' ]
 
 ## Copy archive
+
+- name: "debug value of freesurfer_local_resource_path"
+  debug: var='{{ freesurfer_local_resource_path }}'
+
+- name: "debug value of freesurfer_remote_resource_path"
+  debug: var='{{ freesurfer_remote_resource_path }}'
 
 - name: "copy over our gigantic archive that takes hours to download!"
   copy:

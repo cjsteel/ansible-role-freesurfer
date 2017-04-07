@@ -23,7 +23,7 @@ dependencies:
 
       - name : "ensure for /etc/skel/.bashrc"
         path : '/etc/skel/.bashrc'
-        src  : '{{ ants_bashrc_src_path }}'
+        src  : '{{ freesurfer_bashrc_template }}'
         force : no
         state: "copy"
 

@@ -5,13 +5,20 @@
   remote_user: ubuntu
   pre_tasks:
 
-    - set_fact: fact_controller_user="{{ lookup('env','USER') }}"
+    - name: "assign local user to var 'fact_controller_user' via set_fact"
+      set_fact: fact_controller_user="{{ lookup('env','USER') }}"
+
     - debug: var=fact_controller_user
 
     - set_fact: fact_controller_home="{{ lookup('env','HOME') }}"
     - debug: var=fact_controller_home
 
   vars:
+
+    - freesurfer_debug : True
+
+    - freesurfer_bash_aliases_template: '../files/bash_aliases'
+    - freesurfer_bashrc_template      : '../files/bashrc'
 
     - freesurfer_remote_user            : 'ubuntu'
     - freesurfer_remote_home            : '/home/{{ freesurfer_remote_user }}'
@@ -20,19 +27,21 @@
     - freesurfer_remote_deployment_user : '{{ freesurfer_deployment_user }}'
 
 
-
     - freesurfer_state   : 'present' #'absent' # 'present' # 'absent' # 'purge'
     - freesurfer_ver     : 'v6.0.0'
 
-    - freesurfer_local_resource_directory   : 'sys/sw/ubuntu/16.04/freesurfer/{{ freesurfer_ver }}'
-    - freesurfer_remote_resource_directory  : '{{ freesurfer_remote_home }}/sys/sw/ubuntu/16.04/freesurfer/{{ freesurfer_ver }}'
+    - freesurfer_local_resource_root       : '../../../ace_resources'
+    - freesurfer_local_resource_directory  : '{{ freesurfer_local_resource_root }}/sys/sw/ubuntu/16.04/freesurfer/{{ freesurfer_ver }}'
+
+
+    - freesurfer_remote_resource_directory : '{{ freesurfer_remote_home }}/sys/sw/ubuntu/16.04/freesurfer/{{ freesurfer_ver }}'
 
     - freesurfer_ensure_dirs_on_remote:
 
         freesurfer_remote_resource_dir:
 
           state          : 'directory'
-          path           : '{{ freesurfer_local_resource_directory }}'
+          path           : '{{ freesurfer_remote_resource_directory }}'
           owner          : '{{ freesurfer_remote_user }}'
           group          : '{{ freesurfer_remote_user }}'
           mode           : '0755'
@@ -42,12 +51,10 @@
         freesurfer_local_resource_dir:
 
           state          : 'directory'
-          path           : '{{ fact_controller_home }}/{{ freesurfer_local_resource_directory }}'
+          path           : '{{ freesurfer_local_resource_directory }}'
           owner          : '{{ freesurfer_controller_user }}'
           group          : '{{ freesurfer_controller_user }}'
           mode           : '0755'
-
-freesurfer_bash_aliases_temnplate: './files/bash_aliases'
 
   roles:
     - ../../
