@@ -11,10 +11,37 @@ dependencies:
     tags: ['minc', 'skel']
     skel_entries:
 
+# .bash_aliases
+
       - name : "ensure for /etc/skel/.bash_aliases"
         path : '/etc/skel/.bash_aliases'
         src  : '{{ freesurfer_bash_aliases_template }}'
+        force : no
         state: "copy"
+
+# .bashrc
+
+      - name : "ensure for /etc/skel/.bashrc"
+        path : '/etc/skel/.bashrc'
+        src  : '{{ ants_bashrc_src_path }}'
+        force : no
+        state: "copy"
+
+# .bash_aliases
+
+      - name: "ensure for file name in users ~/.bash_aliases"
+        type: 'blockinfile'
+        marker: '## {mark} ANSIBLE MANAGED BLOCK for $HOME/.bash_aliases'
+        path  : "/etc/skel/.bash_aliases"
+        insertbefore: "BOF"
+        block: |
+          # file: $HOME/.bash_aliases
+          echo "$HOME/.bash_aliases aliases"
+          #
+          #
+        state: "present"
+
+# .bash_aliases
 
       - name: "ensure we have an aliase entry for setting up freesurfer"
         type: 'blockinfile'
@@ -22,10 +49,14 @@ dependencies:
         path  : "/etc/skel/.bash_aliases"
         insertafter: "EOF"
         block: |
-          # add alias for freesurfer setup
+          # alias to initialize freesurfer environment variables
           #
           alias srcfreesurfer="source $FREESURFER_HOME/SetUpFreeSurfer.sh"
+          echo "alias 'srcfreesurfer' was created"
+          #
         state: "present"
+
+# .bashrc
 
       - name: "add export FREESURFER_HOME=/usr/local/freesurfer to /etc/skel/.bashrc"
         type: 'blockinfile'    
