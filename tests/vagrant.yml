@@ -2,7 +2,7 @@
 # file: roles/freesurfer/tests/vagrant.yml
 
 - hosts: all
-  remote_user: ubuntu
+  remote_user: vagrant
   pre_tasks:
 
     - name: "assign local user to var 'fact_controller_user' via set_fact"
@@ -15,26 +15,24 @@
 
   vars:
 
-    - freesurfer_debug : True
+    - freesurfer_debug       : True
+    - freesurfer_state       : 'present' # 'present', 'absent', 'purge'
 
-    - freesurfer_bash_aliases_template: '../files/bash_aliases'
-    - freesurfer_bashrc_template      : '../files/bashrc'
+    - freesurfer_ver         : 'v6.0.0'
+    - freesurfer_archive     : 'freesurfer-Linux-centos6_x86_64-stable-pub-{{ freesurfer_ver }}.tar.gz'
 
-    - freesurfer_remote_user            : 'ubuntu'
+
+    - freesurfer_remote_user            : 'vagrant'
     - freesurfer_remote_home            : '/home/{{ freesurfer_remote_user }}'
     - freesurfer_controller_user        : '{{ fact_controller_user }}'
     - freesurfer_deployment_user        : '{{ freesurfer_remote_user }}'
     - freesurfer_remote_deployment_user : '{{ freesurfer_deployment_user }}'
 
+    - freesurfer_local_resource_directory : '../../../ace_resources/sys/sw/Ubuntu/16.04/freesurfer/{{ freesurfer_ver }}'
+    - freesurfer_local_resource_path      : '{{ freesurfer_local_resource_directory }}/{{ freesurfer_archive }}'
 
-    - freesurfer_state   : 'present' #'absent' # 'present' # 'absent' # 'purge'
-    - freesurfer_ver     : 'v6.0.0'
-
-    - freesurfer_local_resource_root       : '../../../ace_resources'
-    - freesurfer_local_resource_directory  : '{{ freesurfer_local_resource_root }}/sys/sw/ubuntu/16.04/freesurfer/{{ freesurfer_ver }}'
-
-
-    - freesurfer_remote_resource_directory : '{{ freesurfer_remote_home }}/sys/sw/ubuntu/16.04/freesurfer/{{ freesurfer_ver }}'
+    - freesurfer_remote_resource_directory : '{{ freesurfer_remote_home }}/sys/sw/Ubuntu/16.04/freesurfer/{{ freesurfer_ver }}'
+    - freesurfer_remote_resource_path      : '{{ freesurfer_remote_resource_directory }}/{{ freesurfer_archive }}'
 
     - freesurfer_ensure_dirs_on_remote:
 

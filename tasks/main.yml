@@ -39,11 +39,19 @@
 
 ## Copy archive
 
+# IMPORTANT: proper quoted variable form (see commented out command below) is not working in Ansible 2.1.1.0 for debug command
+#- name: "debug value of freesurfer_remote_resource_path"
+#  debug: var='{{ freesurfer_remote_resource_path }}'
+
+- name: "debug value of freesurfer_local_resource_directory"
+  debug: var=freesurfer_local_resource_directory
+  when: freesurfer_debug is defined and debug == True
+
 - name: "debug value of freesurfer_local_resource_path"
-  debug: var='{{ freesurfer_local_resource_path }}'
+  debug: var=freesurfer_local_resource_path
 
 - name: "debug value of freesurfer_remote_resource_path"
-  debug: var='{{ freesurfer_remote_resource_path }}'
+  debug: var=freesurfer_remote_resource_path
 
 - name: "copy over our gigantic archive that takes hours to download!"
   copy:
@@ -70,7 +78,6 @@
     chdir: '{{ freesurfer_remote_resource_directory }}'
     creates: '/usr/local/freesurfer'
   when: freesurfer_state == 'present'
-
 
 - name: "copy over files/license.txt"
   become: true  

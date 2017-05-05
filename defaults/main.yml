@@ -1,9 +1,12 @@
 ---
 # file: roles/ansible-role-freesurfer/defaults/main.yml
 
+
+freesurfer_debug       : True
 freesurfer_state       : 'present' # 'present', 'absent', 'purge'
+
 freesurfer_ver         : 'v6.0.0'
-freesurfer_archive     : 'freesurfer-Linux-centos6_x86_64-stable-pub-v6.0.0.tar.gz'
+freesurfer_archive     : 'freesurfer-Linux-centos6_x86_64-stable-pub-{{ freesurfer_ver }}.tar.gz'
 
 
 freesurfer_remote_user            : '{{ fact_controller_user }}'
