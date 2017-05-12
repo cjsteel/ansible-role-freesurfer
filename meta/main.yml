@@ -36,9 +36,6 @@ dependencies:
         insertbefore: "BOF"
         block: |
           # file: $HOME/.bash_aliases
-          echo "$HOME/.bash_aliases aliases"
-          #
-          #
         state: "present"
 
 # .bash_aliases
@@ -51,8 +48,8 @@ dependencies:
         block: |
           # alias to initialize freesurfer environment variables
           #
-          alias srcfreesurfer="source $FREESURFER_HOME/SetUpFreeSurfer.sh"
-          echo "alias 'srcfreesurfer' was created"
+          alias src_freesurfer="source $FREESURFER_HOME/SetUpFreeSurfer.sh"
+          echo "alias 'src_freesurfer' was created"
           #
         state: "present"
 
