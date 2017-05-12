@@ -16,7 +16,7 @@ freesurfer_controller_home        : '{{ fact_controller_home }}'
 freesurfer_deployment_user        : '{{ freesurfer_controller_user }}'
 freesurfer_remote_deployment_user : '{{ freesurfer_deployment_user }}'
 
-freesurfer_local_resource_directory : '{{ freesurfer_controller_home }}/sys/sw/Ubuntu/16.04/freesurfer/{{ freesurfer_ver }}'
+freesurfer_local_resource_directory : '{{ freesurfer_controller_home }}/src/Ubuntu/16.04/freesurfer/{{ freesurfer_ver }}'
 freesurfer_local_resource_path      : '{{ freesurfer_local_resource_directory }}/{{ freesurfer_archive }}'
 
 freesurfer_remote_resource_directory : '{{ freesurfer_remote_home }}/sys/sw/Ubuntu/16.04/freesurfer/{{ freesurfer_ver }}'
@@ -44,3 +44,4 @@ freesurfer_ensure_dirs_on_local:
     mode           : '0755'
 
 freesurfer_bash_aliases_template: 'roles/freesurfer/files/bash_aliases'
+freesurfer_bashrc_template: '{{ fact_role_path }}/files/bashrc'
