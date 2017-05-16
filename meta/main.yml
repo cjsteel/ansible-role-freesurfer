@@ -27,7 +27,7 @@ dependencies:
         force : no
         state: "copy"
 
-# .bash_aliases
+# ensure for .bash_aliases
 
       - name: "ensure for file name in users ~/.bash_aliases"
         type: 'blockinfile'
@@ -38,11 +38,11 @@ dependencies:
           # file: $HOME/.bash_aliases
         state: "present"
 
-# .bash_aliases
+# ensure for .bash_aliases entry
 
       - name: "ensure we have an aliase entry for setting up freesurfer"
         type: 'blockinfile'
-        marker: '## {mark} ANSIBLE MANAGED BLOCK for FREESURFER ALIAS srcfreesurfer'
+        marker: '## {mark} ANSIBLE MANAGED BLOCK for FREESURFER ALIAS src_freesurfer'
         path  : "/etc/skel/.bash_aliases"
         insertafter: "EOF"
         block: |

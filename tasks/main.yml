@@ -102,31 +102,23 @@
   when: freesurfer_state == 'purge'
   ignore_errors: yes
 
+# remove entry made in .bash_aliases
+
 - name: "ensure we have an aliase to setup freesurfer"
   become: true
   blockinfile:
     dest  : '/etc/skel/.bash_aliases'
-    marker: '## {mark} ANSIBLE MANAGED BLOCK for FREESURFER ALIAS srcfreesurfer'
-    insertafter: 'EOF'
-    content: |
-      # add alias for freesurfer setup
-      #
-      alias srcfreesurfer="source $FREESURFER_HOME/SetUpFreeSurfer.sh"
+    marker: '## {mark} ANSIBLE MANAGED BLOCK for FREESURFER ALIAS src_freesurfer'
     state: 'absent'
   when: freesurfer_state == 'purge'
+
+# remove entry made in .bashrc
 
 - name: "add export FREESURFER_HOME=/usr/local/freesurfer to /etc/skel/.bashrc"
   become: true
   blockinfile:
-    marker: '## {mark} ANSIBLE MANAGED BLOCK for FREESURFER_HOME export'
+    marker: '## {mark} ANSIBLE MANAGED BLOCK for FREESURFER ALIAS src_freesurfer'
     dest: '/etc/skel/.bashrc'
-    insertafter: 'EOF'
-    block: |
-      #
-      # export FREESURFER_HOME=/usr/local/freesurfer
-      if [ -d "/usr/local/freesurfer" ] ; then
-          export FREESURFER_HOME=/usr/local/freesurfer
-      fi
     state: 'absent'
   when: freesurfer_state == 'purge'
 
