@@ -137,11 +137,9 @@ Edit:
 nano freesurfer.yml
 ```
 
-
-
 ```yaml
 ---
-# file: '{{ ansible_project }}/minc.yml'
+# file: '{{ ansible_project }}/freesurfer.yml'
 
 - hosts: freesurfer
   become: true
