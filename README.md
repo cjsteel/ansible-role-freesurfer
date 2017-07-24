@@ -14,6 +14,15 @@ It is an important tool in functional brain mapping and facilitates the visualiz
 
 It contains tools to conduct both volume based and surface based analysis, which primarily use the white matter surface. FreeSurfer includes tools for the reconstruction of topologically correct and geometrically accurate models of both the gray/white and pial surfaces, for measuring cortical thickness, surface area and folding, and for computing inter-subject registration based on the pattern of cortical folds. In addition, an automated labeling of 35 non-cortical regions is included in the package."
 
+## Quick start
+
+### Ansible command
+
+```shell
+ansible-playbook systems.yml -i inventory/dev --limit workstation-001
+```
+
+
 
 Resources
 ---------
@@ -28,8 +37,11 @@ Requirements
 
 ### Ubuntu 16.04
 
+On Ubuntu platforms, you may encounter the error "freeview.bin: error while loading shared libraries: libjpeg.so.62: cannot open shared object file: No such file or directory." Freeview will work fine if you install libjpeg62-dev run: 
+
 ```shell
 sudo apt-get install libjpeg62
+sudo apt-get install libjpeg62-dev
 ```
 
 
@@ -41,12 +53,6 @@ Options
 
 Issues
 ------
-
-On Ubuntu platforms, you may encounter the error "freeview.bin: error while loading shared libraries: libjpeg.so.62: cannot open shared object file: No such file or directory." Freeview will work fine if you install libjpeg62-dev run: 
-
-```shell
-sudo apt-get install libjpeg62-dev
-```
 
 
 Role Variables

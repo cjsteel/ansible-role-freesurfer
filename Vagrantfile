@@ -25,7 +25,7 @@ Vagrant.configure("2") do |config|
     config.vm.define box[:name] do |vms|
 #      vms.ssh.password = 'vagrant'
       vms.ssh.private_key_path = '~/.ssh/id_rsa'
-#      vms.ssh.insert_key = true
+      vms.ssh.insert_key = true
       vms.vm.box = box[:box]
       vms.vm.hostname = "ansible-#{role}-#{box[:name]}"
       vms.vm.synced_folder ".vagrant/synced", "/home/vagrant"

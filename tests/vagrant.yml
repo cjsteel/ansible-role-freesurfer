@@ -35,7 +35,8 @@
     - freesurfer_deployment_user        : '{{ freesurfer_remote_user }}'
     - freesurfer_remote_deployment_user : '{{ freesurfer_deployment_user }}'
 
-    - freesurfer_local_resource_directory : '../../../ace_resources/sys/sw/Ubuntu/16.04/freesurfer/{{ freesurfer_ver }}'
+    - freesurfer_local_resource_directory : '{{ freesurfer_controller_home }}/src/sw/freesurfer/{{ freesurfer_ver }}'
+#    - freesurfer_local_resource_directory : '../../../ace_resources/sys/sw/Ubuntu/16.04/freesurfer/{{ freesurfer_ver }}'
     - freesurfer_local_resource_path      : '{{ freesurfer_local_resource_directory }}/{{ freesurfer_archive }}'
 
     - freesurfer_remote_resource_directory : '{{ freesurfer_remote_home }}/sys/sw/Ubuntu/16.04/freesurfer/{{ freesurfer_ver }}'
