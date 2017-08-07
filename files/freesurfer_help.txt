@@ -1,0 +1,7 @@
+## BEGIN ANSIBLE MANAGED BLOCK for FREESURFER_HOME export 
+#
+# export FREESURFER_HOME=/usr/local/freesurfer
+if [ -d "/usr/local/freesurfer" ] ; then
+    export FREESURFER_HOME=/usr/local/freesurfer
+fi
+## END ANSIBLE MANAGED BLOCK for FREESURFER_HOME export 
