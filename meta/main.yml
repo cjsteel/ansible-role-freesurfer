@@ -2,6 +2,7 @@
 dependencies:
 
   - role: ensure_dirs
+#    become: true
     tags: ['freesurfer', 'ensure_dirs']
     ensure_dirs_on_remote: '{{ freesurfer_ensure_dirs_on_remote }}'
     ensure_dirs_on_local : '{{ freesurfer_ensure_dirs_on_local }}'

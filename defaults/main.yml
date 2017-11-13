@@ -8,18 +8,17 @@ freesurfer_state       : 'present' # 'present', 'absent', 'purge'
 freesurfer_ver         : 'v6.0.0'
 freesurfer_archive     : 'freesurfer-Linux-centos6_x86_64-stable-pub-{{ freesurfer_ver }}.tar.gz'
 
-
-freesurfer_remote_user            : '{{ fact_controller_user }}'
-freesurfer_remote_home            : '{{ fact_controller_home }}'
 freesurfer_controller_user        : '{{ fact_controller_user }}'
 freesurfer_controller_home        : '{{ fact_controller_home }}'
-freesurfer_deployment_user        : '{{ freesurfer_controller_user }}'
-freesurfer_remote_deployment_user : '{{ freesurfer_deployment_user }}'
+freesurfer_deployment_user        : '{{ project_deployment_user_name }}'
+freesurfer_deployment_home        : '{{ project_deployment_user_home }}'
 
-freesurfer_local_resource_directory : '{{ freesurfer_controller_home }}/src/sw/freesurfer/{{ freesurfer_ver }}'
+
+
+freesurfer_local_resource_directory : '{{ freesurfer_controller_home }}/src/sw/Ubuntu/16.04/freesurfer/{{ freesurfer_ver }}'
 freesurfer_local_resource_path      : '{{ freesurfer_local_resource_directory }}/{{ freesurfer_archive }}'
 
-freesurfer_remote_resource_directory : '{{ freesurfer_remote_home }}/src/sw/Ubuntu/16.04/freesurfer/{{ freesurfer_ver }}'
+freesurfer_remote_resource_directory : '{{ freesurfer_deployment_home }}/src/sw/Ubuntu/16.04/freesurfer/{{ freesurfer_ver }}'
 freesurfer_remote_resource_path      : '{{ freesurfer_remote_resource_directory }}/{{ freesurfer_archive }}'
 
 
@@ -29,8 +28,8 @@ freesurfer_ensure_dirs_on_remote:
 
     state          : 'directory'
     path           : '{{ freesurfer_remote_resource_directory }}'
-    owner          : '{{ freesurfer_remote_user }}'
-    group          : '{{ freesurfer_remote_user }}'
+    owner          : '{{ freesurfer_deployment_user }}'
+    group          : '{{ freesurfer_deployment_user }}'
     mode           : '0755'
 
 freesurfer_ensure_dirs_on_local:
