@@ -8,8 +8,8 @@ freesurfer_state       : 'present' # 'present', 'absent', 'purge'
 freesurfer_ver         : 'v6.0.0'
 freesurfer_archive     : 'freesurfer-Linux-centos6_x86_64-stable-pub-{{ freesurfer_ver }}.tar.gz'
 
-freesurfer_controller_user        : '{{ fact_controller_user }}'
-freesurfer_controller_home        : '{{ fact_controller_home }}'
+freesurfer_controller_user        : '{{ project_controller_user_name }}'
+freesurfer_controller_home        : '{{ project_controller_user_home }}'
 freesurfer_deployment_user        : '{{ project_deployment_user_name }}'
 freesurfer_deployment_home        : '{{ project_deployment_user_home }}'
 
