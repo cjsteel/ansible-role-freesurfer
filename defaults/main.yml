@@ -15,10 +15,10 @@ freesurfer_deployment_home        : '{{ project_deployment_user_home }}'
 
 
 
-freesurfer_local_resource_directory : '{{ freesurfer_controller_home }}/src/sw/Ubuntu/16.04/freesurfer/{{ freesurfer_ver }}'
+freesurfer_local_resource_directory : '{{ freesurfer_controller_home }}/sw/ubuntu/16.04/freesurfer/{{ freesurfer_ver }}'
 freesurfer_local_resource_path      : '{{ freesurfer_local_resource_directory }}/{{ freesurfer_archive }}'
 
-freesurfer_remote_resource_directory : '{{ freesurfer_deployment_home }}/src/sw/Ubuntu/16.04/freesurfer/{{ freesurfer_ver }}'
+freesurfer_remote_resource_directory : '{{ freesurfer_deployment_home }}/sw/ubuntu/16.04/freesurfer/{{ freesurfer_ver }}'
 freesurfer_remote_resource_path      : '{{ freesurfer_remote_resource_directory }}/{{ freesurfer_archive }}'
 
 
